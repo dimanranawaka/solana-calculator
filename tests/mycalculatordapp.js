@@ -1,13 +1,27 @@
-const anchor = require("@coral-xyz/anchor");
+const assert = require('assert');
+const anchor = require('@coral-xyz/anchor');
+const { SystemProgram } = anchor.web3;
 
 describe("mycalculatordapp", () => {
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.AnchorProvider.env());
 
-  it("Is initialized!", async () => {
-    // Add your test here.
-    const program = anchor.workspace.Mycalculatordapp;
-    const tx = await program.methods.initialize().rpc();
-    console.log("Your transaction signature", tx);
+  const provider = anchor.AnchorProvider.local();
+  anchor.setProvider(provider);
+
+  const calculator = anchor.web3.Keypair.generate();
+  const program = anchor.workspace.Mycalculatordapp;
+
+  it("Calculator Creating", async () => {
+    await program.rpc.create("Welcome to Solana", {
+      accounts: {
+        calculator: calculator.publicKey,
+        user: provider.wallet.publicKey,
+        systemProgram: SystemProgram.programId
+      },
+      signers: [calculator]
+    });
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.greeting === "Welcome to Solana");
   });
+
 });

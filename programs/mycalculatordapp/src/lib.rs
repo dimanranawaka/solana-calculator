@@ -9,7 +9,7 @@ pub mod mycalculatordapp {
     pub fn create(ctx: Context<Create>,init_message:String) -> Result<()> {
         let calculator = &mut ctx.accounts.calculator;
         calculator.greeting = init_message;
-        Ok(());
+        Ok(())
     }
 }
 
@@ -24,7 +24,7 @@ pub struct Create<'info> {
 
 #[account]
 pub struct Calculator {
-    pub greeting : String,
+    pub greeting: String,
     pub result :i64,
     pub remainder : i64
 }
