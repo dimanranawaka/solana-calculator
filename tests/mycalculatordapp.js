@@ -23,7 +23,8 @@ describe("mycalculatordapp", () => {
     const account = await program.account.calculator.fetch(calculator.publicKey);
     assert.ok(account.greeting === "Welcome to Solana");
   });
-  it("Adds to numbers", async () => {
+
+  it("Adds two numbers", async () => {
     await program.rpc.add(new anchor.BN(2), new anchor.BN(3), {
       accounts: {
         calculator: calculator.publicKey
@@ -31,5 +32,15 @@ describe("mycalculatordapp", () => {
     })
     const account = await program.account.calculator.fetch(calculator.publicKey);
     assert.ok(account.result.eq(new anchor.BN(5)))
+  });
+
+  it("Subtract two numbers", async () => {
+    await program.rpc.sub(new anchor.BN(5), new anchor.BN(3), {
+      accounts: {
+        calculator: calculator.publicKey
+      }
+    })
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.result.eq(new anchor.BN(2)))
   })
 });
